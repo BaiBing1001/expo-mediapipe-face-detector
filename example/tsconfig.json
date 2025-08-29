@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-mediapipe-face-detector": ["../src/index"],
+      "expo-mediapipe-face-detector/*": ["../src/*"]
+    }
+  }
+}
