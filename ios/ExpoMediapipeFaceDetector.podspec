@@ -19,6 +19,8 @@ Pod::Spec.new do |s|
   s.static_framework = true
 
   s.dependency 'ExpoModulesCore'
+  # MediaPipe Tasks Vision for face detection
+  s.dependency 'MediaPipeTasksVision', '~> 0.10.0'
 
   # Swift/Objective-C compatibility
   s.pod_target_xcconfig = {
@@ -26,4 +28,9 @@ Pod::Spec.new do |s|
   }
 
   s.source_files = "**/*.{h,m,mm,swift,hpp,cpp}"
+  
+  # Include MediaPipe model files
+  s.resource_bundles = {
+    'ExpoMediapipeFaceDetectorModels' => ['Models/*.tflite']
+  }
 end
