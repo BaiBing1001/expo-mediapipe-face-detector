@@ -1,14 +1,29 @@
 import { registerWebModule, NativeModule } from 'expo';
 
-import { ExpoMediapipeFaceDetectorModuleEvents } from './ExpoMediapipeFaceDetector.types';
+import { 
+  ExpoMediapipeFaceDetectorModuleEvents, 
+  FaceDetectorConfig,
+  FaceDetectionResult 
+} from './ExpoMediapipeFaceDetector.types';
 
 class ExpoMediapipeFaceDetectorModule extends NativeModule<ExpoMediapipeFaceDetectorModuleEvents> {
-  PI = Math.PI;
-  async setValueAsync(value: string): Promise<void> {
-    this.emit('onChange', { value });
+  async initializeDetector(config: FaceDetectorConfig): Promise<void> {
+    console.warn('MediaPipe face detection is not supported on web platform');
+    throw new Error('Web platform not supported for MediaPipe face detection');
   }
-  hello() {
-    return 'Hello world! 👋';
+
+  async detectFacesInImage(imageUri: string): Promise<FaceDetectionResult> {
+    console.warn('MediaPipe face detection is not supported on web platform');
+    throw new Error('Web platform not supported for MediaPipe face detection');
+  }
+
+  async detectFacesInBase64(base64Data: string): Promise<FaceDetectionResult> {
+    console.warn('MediaPipe face detection is not supported on web platform');
+    throw new Error('Web platform not supported for MediaPipe face detection');
+  }
+
+  async cleanup(): Promise<void> {
+    // No-op for web
   }
 }
 

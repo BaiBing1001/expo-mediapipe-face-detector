@@ -151,7 +151,7 @@ public class ExpoMediapipeFaceDetectorModule: Module {
   }
   
   private func processFrame(frameData: [String: Any]) async throws -> [String: Any] {
-    guard let detector = faceDetector, isInitialized else {
+    guard faceDetector != nil, isInitialized else {
       throw NSError(domain: "FaceDetector", code: -1, userInfo: [NSLocalizedDescriptionKey: "Face detector not initialized"])
     }
     
@@ -194,7 +194,7 @@ public class ExpoMediapipeFaceDetectorModule: Module {
             "position": [
               "x": keypoint.location.x,
               "y": keypoint.location.y,
-              "z": keypoint.location.z ?? 0
+              "z": 0.0 // MediaPipe iOS face detection provides 2D coordinates
             ]
           ])
         }
@@ -219,9 +219,16 @@ public class ExpoMediapipeFaceDetectorModule: Module {
   }
   
   private func getModelPath() -> String {
-    // Return path to MediaPipe face detection model
-    guard let modelPath = Bundle.main.path(forResource: "face_detection_short_range", ofType: "tflite") else {
-      fatalError("Face detection model not found in bundle")
+    // Return path to MediaPipe face detection model from the resource bundle
+    guard let bundle = Bundle(for: ExpoMediapipeFaceDetectorModule.self),
+          let bundleURL = bundle.url(forResource: "ExpoMediapipeFaceDetectorModels", withExtension: "bundle"),
+          let resourceBundle = Bundle(url: bundleURL),
+          let modelPath = resourceBundle.path(forResource: "face_detection_short_range", ofType: "tflite") else {
+      // Fallback to main bundle for development/testing
+      guard let mainBundlePath = Bundle.main.path(forResource: "face_detection_short_range", ofType: "tflite") else {
+        fatalError("Face detection model not found in resource bundle or main bundle")
+      }
+      return mainBundlePath
     }
     return modelPath
   }
